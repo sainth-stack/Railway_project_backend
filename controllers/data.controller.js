@@ -85,11 +85,7 @@ const getObjectives = async (req, res) => {
           as: "Assessment_details",
         },
       },
-      {
-        $project:{
-          fullname
-        }
-      }
+    
     ]);
     let result = results.map((user) => {
       let Batch_Details = [];
@@ -109,6 +105,7 @@ const getObjectives = async (req, res) => {
     const Students = await StudentModel.find({}, { fullname: 1 }).sort({
       _id: -1,
     });
+    
     // let result2 = TestSubmissions.map((task) => {
     //   let Batch_Details2 = [];
     //   let newObj = {
