@@ -11,6 +11,9 @@ const Schema = new mongoose.Schema(
     },
     sessionid : {
       type:String
+    },
+    sessionDate : {
+      type:String
     }
   },
 

@@ -25,7 +25,7 @@ const Schema = new mongoose.Schema(
       type:String,
     },
  remarks:{
-     type:String,
+     type:Array,
  },
     batch_name: {
       type: String,

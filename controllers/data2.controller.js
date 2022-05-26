@@ -178,26 +178,158 @@ const getObjectives = async (req, res) => {
         final.Assignment4=final.Assignment4 + item.Assignment_Sum.Assignment4;
 
         return {
-          part_name: item.fullname,
-          assessment: item.Assignment_Details,
+          fullname: item.fullname,
+          Assessment_done: item.Assignment_Details,
         };
       });
       return {
         Batch_Name: item.batchName,
+        coachId: filterData.length > 0 ? filterData[0].coachId : "",
         Date_created: filterData.length > 0 ? filterData[0].sessionDate : "",
-        part_details: data,
+        ToT_fields_present: "",
+        Assessment_details: {...final},
+        field_staff_details: data,
       };
     });
     const dat2 = Batch_Details.filter((item) => {
-      if (item.part_details.length > 0) {
+      if (item.field_staff_details.length > 0) {
         return item;
       }
     });
+    const result = master_trainers.map((item) => {
+      const filterData = dat2.filter(
+        (itemTask) => item._id.toString() == itemTask.coachId.toString()
+      );
+
+      return {
+        ...item,
+        Batch_details: filterData,
+      };
+    });
+    const api1_data = super_trainers.map((sTrainer) => {
+      filtered_data = result.filter((mTrainer) => {
+        return mTrainer.division == sTrainer.division;
+      });
+      return { Data_Set: sTrainer, MT_Data: filtered_data };
+    });
+    // const Batch_Details=field_staff_details.map((item)=>{
+    //   if(item.length>0){
+    //     return item
+    //   }
+    // })
+    // const TestSubmission = TestSubmissions.map((item) => {
+    //   let field_staff_details = [];
+    //   const field_staff_details2 = Students.filter((itemTask) => {
+    //     if (item.studentid.toString() == itemTask._id.toString()) {
+    //       if (field_staff_details.length == 0) {
+    //         field_staff_details.push(itemTask);
+    //       } else if (
+    //         field_staff_details.some(
+    //           (person) => person._id.toString() !== itemTask._id.toString()
+    //         )
+    //       ) {
+    //         field_staff_details.push(itemTask);
+    //       }
+    //     }
+    //   });
+    //   const Assessment_details = Session.filter(
+    //     (itemTask) => item.sessionId == itemTask._id
+    //   );
+
+    //   return {
+    //     ...item._doc,
+    //     field_staff_details,
+    //     Assessment_details,
+    //   };
+    // });
+
+    // let result = master_trainers.map((user, index) => {
+    //   filterData = TestSubmission.filter((itemTask) => {
+    //     if (itemTask.Assessment_details[0] != undefined) {
+    //       if (
+    //         itemTask.Assessment_details[0].coachId !== undefined &&
+    //         itemTask.Assessment_details[0].coachId.toString() ===
+    //           user._id.toString()
+    //       ) {
+    //         return true;
+    //       }
+    //       return false;
+    //     }
+    //     return false;
+    //   });
+    //   Batch_Details_final = filterData.map((item) => {
+    //     let date = "";
+    //     let batch_name;
+    //     let assignments = {
+    //       Assessment_1: false,
+    //       Assessment_2: false,
+    //       Assessment_3: false,
+    //       Assessment_4: false,
+    //     };
+    //     Batches.filter((itemTask) => {
+    //       if (item.Assessment_details[0].batchId !== undefined) {
+    //         if (
+    //           itemTask._id.toString() ==
+    //           item.Assessment_details[0].batchId.toString()
+    //         ) {
+    //           batch_name = itemTask.batchName;
+    //         }
+    //       }
+    //     });
+    //     // Session.filter((itemTask)=>{
+    //     //   if(item.sessionId !== undefined && itemTask._id !== undefined){
+    //     //     if(itemTask._id.toString() == item.sessionId.toString()){
+    //     //       date = itemTask.sessionDate;
+    //     //     }
+    //     //   }
+    //     // })
+    //     let assessments = Tests.map((test, index) => {
+    //       if (item.testid.toString() == test._id.toString()) {
+    //         switch (test.testTitle) {
+    //           case "Assessment 1":
+    //             assignments = { ...assignments, Assessment_1: true };
+    //           case "Assessment 2":
+    //             assignments = { ...assignments, Assessment_2: true };
+    //           case "Assessment 3":
+    //             assignments = { ...assignments, Assessment_3: true };
+    //           case "Assessment 4":
+    //             assignments = { ...assignments, Assessment_4: true };
+    //           default:
+    //             break;
+    //         }
+    //       }
+    //     });
+    //     let field_staff_details = item.field_staff_details.map((item) => {
+    //       return {
+    //         test_id: item.testid !== undefined ? "" : item.testid,
+    //         _id: item._id,
+    //         fullname: item.fullname,
+    //         ...assignments,
+    //       };
+    //     });
+    //     return {
+    //       batch_name: batch_name,
+    //       date_created: date || "",
+    //       TOT_fields_present: "",
+    //       Assessment_details: "",
+    //       Field_staff_details: field_staff_details,
+    //     };
+    //   });
+
+    //   return { ...user, Batch_Details: Batch_Details_final };
+    // });
+
+    // const api1_data = super_trainers.map((sTrainer) => {
+    //   filtered_data = result.filter((mTrainer) => {
+    //     return mTrainer.division == sTrainer.division;
+    //   });
+    //   return {Data_Set:sTrainer,MT_Data:{...filtered_data}}
+    // });
 
     res.status(200).send(
       successResponse({
         message: "Users Retrieved Successfully!",
-        data: dat2,
+        data: api1_data,
       })
     );
   } catch (err) {

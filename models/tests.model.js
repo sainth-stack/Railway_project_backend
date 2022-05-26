@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = new mongoose.Schema(
   {
-    batchName: {
+    testTitle: {
       type: String,
     },
   },
@@ -10,4 +10,4 @@ const Schema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("batches", Schema);
+module.exports = mongoose.model("tests", Schema);

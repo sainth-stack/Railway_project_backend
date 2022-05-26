@@ -15,8 +15,11 @@ app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 
 // Routes
-const {objectiveRoute} = require("./routes");
+const {objectiveRoute,page2Route,page3Route} = require("./routes");
 app.use('/api', objectiveRoute)
+app.use('/api', page2Route)
+app.use('/api', page3Route)
+
 
 
 
